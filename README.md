@@ -95,11 +95,9 @@ This server is a Node.js tool server that:
 ## Features
 
 - ✅ Full MCP compliance (`initialize`, `mcp/listTools`, `mcp/invokeTool`)
-- 🔑 Secure API key injection via `.env`
+- 🔑 Secure API key injection via the client
 - 🛫 Real-time flight search with SerpAPI
 - 📄 Returns normalized flights with pricing, duration, segments, carbon emissions, etc.
-- 🧾 Detailed logging to file for debugging
-- ⚠️ Graceful error handling and input validation
 
 ---
 
@@ -119,16 +117,33 @@ cd mcp-flight-server
 npm install
 ```
 
-### Configure `.env`
+### 🔐 API Key Configuration
 
-Create a `.env` file in the root folder:
+This server **requires** the `SERPAPI_KEY` environment variable to access the [SerpAPI Google Flights engine](https://serpapi.com/google-flights-api). However, it does **not** manage authentication itself — the environment or client invoking the server must provide the key.
 
-```ini
-SERPAPI_KEY=your_serpapi_key_here
+In most cases, the **MCP client** (e.g. Semantic Kernel) is responsible for setting the environment variable when launching the server. This allows the server to remain **stateless and portable**, with no hardcoded secrets.
+
+🧠 Example: Launch from C# Semantic Kernel MCP Client
+You can launch the MCP server directly from C# using Semantic Kernel's McpClientFactory:
+
 ```
-
-Never commit `.env` to source control!
-
+await using IMcpClient flightsMcpClient = await McpClientFactory.CreateAsync(
+    new StdioClientTransport(new()
+    {
+        Name = "Flights",
+        Command = "node",
+        Arguments = new[]
+        {
+            @"C:\path\to\your\mcp-flight-server-node\server.js"
+        },
+        EnvironmentVariables = new Dictionary<string, string>
+        {
+            { "SERPAPI_KEY", "YOUR_KEY" } // Pass your SerpAPI key securely here
+        },
+        // Optional: specify working directory if needed
+        // WorkingDirectory = @"C:\path\to\your\mcp-flight-server-node"
+    }));
+```
 ---
 
 ## Running the Server
