@@ -275,84 +275,12 @@ cat test-request.json | node index.js
 
 ## Future Enhancements (Roadmap)
 
-- Retry with exponential backoff on transient API errors
 - Support for multi-leg and return flights
 - Docker containerization for easy deployment
 - Caching layer for repeated queries
-- TypeScript rewrite with strict typing
 
 ---
 
-## About the Author
-
-Joe Hodkinson — passionate about AI, travel, and making tech work better for humans.
-
-GitHub: [https://github.com/joehodkinson](https://github.com/joehodkinson)  
-LinkedIn: [https://linkedin.com/in/joehodkinson](https://linkedin.com/in/joehodkinson)
-
----
-
-## License
-
-MIT License © 2025 Joe Hodkinson
-
----
-
-## Appendix: Sample Error Handling
-
-### Missing parameters example
-
-Request:
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 4,
-  "method": "mcp/invokeTool",
-  "params": {
-    "toolName": "getFlightInfo",
-    "arguments": {
-      "from": "LHR"
-    }
-  }
-}
-```
-
-Response:
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 4,
-  "error": {
-    "code": -32602,
-    "message": "Missing required parameter(s): to, date in tool 'getFlightInfo'. Expected format: { from: \"IATA\", to: \"IATA\", date: \"YYYY-MM-DD\" }"
-  }
-}
-```
-
-### Invalid JSON example
-
-Request:
-
-```text
-{ invalid_json }
-```
-
-Response:
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": null,
-  "error": {
-    "code": -32700,
-    "message": "Parse error: Invalid JSON"
-  }
-}
-```
-
----
 
 Happy coding and happy flying! 🛫🧠  
-Feel free to reach out if you want help extending this project or building more MCP tools.
+
